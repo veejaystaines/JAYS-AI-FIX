@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JAYS AI FINAL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;500&family=Fira+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='32' cy='32' r='30' fill='%238f94fb' opacity='0.22'/%3E%3Ccircle cx='32' cy='32' r='22' fill='%234e54c8' opacity='0.28'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%234e54c8'/%3E%3Cellipse cx='32' cy='36' rx='14' ry='6' fill='%23fff' opacity='0.2'/%3E%3Ccircle cx='26' cy='30' r='2.5' fill='%23fff'/%3E%3Ccircle cx='38' cy='30' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
+  <style>
+    /* ...[keep all your previous CSS here]... */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: linear-gradient(120deg, #e3eafe 0%, #c8e7fa 40%, #8f94fb 100%);
+      font-family: 'Roboto', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: 200% 200%;
+      animation: animateBg 14s ease-in-out infinite alternate;
+      height: 100vh;
+      width: 100vw;
+      box-sizing: border-box;
+      overflow: auto;
+    }
+    @keyframes animateBg {
+      0% {background-position: 0% 60%;}
+      100% {background-position: 100% 40%;}
+    }
+    .container {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(9px) saturate(145%);
+      -webkit-backdrop-filter: blur(9px) saturate(145%);
+      border-radius: 42px;
+      box-shadow: 0 12px 50px 12px rgba(80, 110, 255, 0.17), 0 2px 8px 0 rgba(0,0,0,0.07);
+      padding: 76px 48px 46px 48px;
+      width: 100%;
+      max-width: 555px;
+      text-align: center;
+      position: relative;
+      border: 2.5px solid #e6eaff;
+      margin-bottom: 32px;
+      margin-top: 32px;
+      box-sizing: border-box;
+    }
+    .header-wave {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 120px;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(1px);
+      opacity: 0.94;
+      animation: waveGlow 4s linear infinite alternate;
+    }
+    @keyframes waveGlow {
+      from { filter: blur(1px) brightness(1);}
+      to { filter: blur(1.7px) brightness(1.14);}
+    }
+    .ai-icon {
+      width: 77px;
+      height: 77px;
+      display: block;
+      margin: 0 auto 15px auto;
+      z-index: 1;
+      position: relative;
+      filter: drop-shadow(0 2px 12px #8f94fb56) blur(.2px);
+      animation: floatAI 3.2s ease-in-out infinite alternate;
+      background: linear-gradient(160deg, #e3eafe 60%, #8f94fb 100%);
+      border-radius: 50%;
+      padding: 5px;
+    }
+    @keyframes floatAI {
+      0% { transform: translateY(0);}
+      100% { transform: translateY(-11px);}
+    }
+    h1 {
+      font-family: 'Montserrat', 'Roboto', sans-serif;
+      font-size: 2.9rem;
+      margin-bottom: 4px;
+      margin-top: 6px;
+      color: #4e54c8;
+      font-weight: 900;
+      letter-spacing: 2.2px;
+      z-index: 1;
+      position: relative;
+      text-shadow: 0 7px 28px #c4e0ffbb;
+      background: -webkit-linear-gradient(#4e54c8, #8f94fb 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      user-select: none;
+      cursor: pointer;
+      transition: text-shadow .19s, letter-spacing .22s, background .22s;
+    }
+    h1:hover {
+      text-shadow: 0 13px 55px #8f94fb;
+      letter-spacing: 4px;
+      background: -webkit-linear-gradient(#8f94fb, #4e54c8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      font-size: 1.22rem;
+      color: #6b6b9d;
+      margin-bottom: 33px;
+      z-index: 1;
+      position: relative;
+      font-weight: 500;
+      letter-spacing: 0.14px;
+      font-family: 'Roboto',sans-serif;
+      filter: drop-shadow(0 1px 0 #fff) blur(.1px);
+    }
+    .subtitle .badge {
+      background: linear-gradient(90deg, #8f94fb 0%, #e3eafe 80%);
+      color: #4e54c8;
+      font-size: 0.93em;
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-weight: bold;
+      margin-left: 10px;
+      filter: drop-shadow(0 0px 1px #8f94fb33);
+    }
+    .recent-history-btn {
+      background: linear-gradient(90deg, #e3eafe 0%, #8f94fb 100%);
+      color: #4e54c8;
+      border: 1.5px solid #bfcaff;
+      border-radius: 10px;
+      font-size: 1.01rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      margin-top: 6px;
+      padding: 8px 17px;
+      cursor: pointer;
+      box-shadow: 0 1.5px 8px rgba(80, 110, 255, 0.08);
+      transition: background 0.16s, box-shadow 0.16s, color 0.13s;
+      outline: none;
+      display: inline-block;
+      position: relative;
+      z-index: 2;
+    }
+    .recent-history-btn:hover, .recent-history-btn.active {
+      background: linear-gradient(90deg, #8f94fb 0%, #e3eafe 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(80, 110, 255, 0.13);
+    }
+    .recent-history-list {
+      max-height: 180px;
+      overflow-y: auto;
+      background: #f6f7fe;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px #8f94fb20;
+      margin: 9px 0 16px 0;
+      padding: 7px 0 7px 0;
+      text-align: left;
+      position: relative;
+      z-index: 3;
+      border: 1.5px solid #e3eafe;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+    .recent-history-list.visible {
+      display: block;
+    }
+    .recent-history-item {
+      padding: 8px 22px 8px 18px;
+      cursor: pointer;
+      font-size: 1.01em;
+      color: #4e54c8;
+      border-bottom: 1px solid #e3eafe;
+      transition: background 0.12s, color 0.13s;
+      border-radius: 6px;
+    }
+    .recent-history-item:last-child {
+      border-bottom: none;
+    }
+    .recent-history-item:hover, .recent-history-item.active {
+      background: #e3eafe;
+      color: #222;
+    }
+    label {
+      font-size: 1.18rem;
+      color: #35366d;
+      margin-bottom: 10px;
+      display: block;
+      text-align: left;
+      font-weight: 700;
+      z-index: 1;
+      position: relative;
+      letter-spacing: 0.2px;
+      transition: color .18s;
+    }
+    #question {
+      font-size: 1.13rem;
+      width: 100%;
+      padding: 18px;
+      border-radius: 18px;
+      border: 2px solid #c2d2f7;
+      margin-bottom: 20px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color .18s, box-shadow .17s, background .14s;
+      background: #f9fbff;
+      resize: none;
+      min-height: 68px;
+      max-height: 140px;
+      z-index: 1;
+      position: relative;
+      font-family: inherit;
+      color: #27284b;
+      box-shadow: 0 1.5px 11px #c8e7fa42;
+    }
+    #question:focus {
+      border-color: #8f94fb;
+      box-shadow: 0 0 0 4px #8f94fb33;
+      background: #f4f7ff;
+    }
+    .button-row {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    #run-ai {
+      background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 18px rgba(80, 110, 255, 0.15);
+      transition: background .16s, box-shadow .17s, transform .13s;
+      margin-bottom: 7px;
+      z-index: 1;
+      position: relative;
+      letter-spacing: 0.3px;
+      outline: none;
+      margin-right: 0;
+      margin-left: 0;
+      vertical-align: middle;
+      display: inline-block;
+    }
+    #run-ai:active {
+      transform: scale(0.97);
+    }
+    #run-ai:hover, #run-ai:focus-visible {
+      background: linear-gradient(90deg, #8f94fb 0%, #4e54c8 100%);
+      box-shadow: 0 7px 28px rgba(80, 110, 255, 0.22);
+      transform: translateY(-1px) scale(1.035);
+    }
+    #output {
+      margin-top: 36px;
+      font-size: 1.19rem;
+      color: #222;
+      background: #f6f7fe;
+      border-radius: 17px;
+      min-height: 64px;
+      max-height: 45vh;
+      padding: 29px 20px 20px 20px;
+      box-shadow: 0 3px 19px rgba(80, 110, 255, 0.13);
+      word-break: break-word;
+      text-align: left;
+      border: 2px solid #e5eaff;
+      transition: background 0.2s, border 0.2s, min-height .11s;
+      z-index: 1;
+      position: relative;
+      animation: fadeIn 0.8s;
+      overflow-y: auto;
+      overflow-x: auto;
+      line-height: 1.7;
+      user-select: text;
+    }
+    /* Remove the robot symbol */
+    #output:before {
+      display: none;
+      content: "";
+    }
+    #output pre, #output code {
+      background: #0e1331;
+      color: #e3eafe;
+      border-radius: 8px;
+      display: block;
+      padding: 13px 17px;
+      font-size: 1em;
+      margin: 13px 0;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+    #output .success {
+      color: #49c97c;
+      font-weight: bold;
+    }
+    #output .error {
+      color: #c44;
+      font-weight: bold;
+    }
+    .copy-btn {
+      display: inline-block;
+      margin-left: 7px;
+      background: #e3eafe;
+      color: #8f94fb;
+      border: 1px solid #bfcaff;
+      border-radius: 7px;
+      font-size: 0.97rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: background .11s;
+      margin-top: 5px;
+    }
+    .copy-btn:hover { background: #c8e7fa; }
+    .creator {
+      margin-top: 54px;
+      font-size: 1.12rem;
+      color: #888;
+      letter-spacing: 0.22px;
+      text-align: center;
+      z-index: 1;
+      position: relative;
+      font-family: 'Montserrat', 'Roboto', sans-serif;
+      border-top: 1px dashed #d3d7ef;
+      padding-top: 14px;
+      user-select: none;
+    }
+    .creator span {
+      font-weight: bold;
+      color: #4e54c8;
+      letter-spacing: 0.5px;
+      font-size: 1.14em;
+    }
+    .footer {
+      margin-top: 18px;
+      font-size: 1.04rem;
+      color: #adb5c9;
+      text-align: center;
+      z-index: 1;
+      position: relative;
+      font-family: 'Roboto', sans-serif;
+      letter-spacing: 0.12px;
+      user-select: none;
+    }
+    .footer svg {
+      vertical-align: -3px;
+      margin-right: 3px;
+    }
+    @media (max-width: 700px) {
+      .container {
+        padding: 13px 2vw 10px 2vw;
+        max-width: 99vw;
+        border-radius: 17px;
+      }
+      h1 { font-size: 1.36rem; }
+      .subtitle { font-size: 0.97rem; }
+      .creator {
+        font-size: 0.89rem;
+        margin-top: 20px;
+      }
+      .ai-icon {
+        width: 41px;
+        height: 41px;
+      }
+      #output {
+        font-size: 1.02rem;
+        padding: 12px 7px;
+        max-height: 32vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <svg class="header-wave" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,120 Q250,30 500,120 L500,0 L0,0 Z" fill="#e3eafe"/>
+    </svg>
+    <svg class="ai-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" fill="#8f94fb" opacity="0.22"/>
+      <circle cx="32" cy="32" r="22" fill="#4e54c8" opacity="0.28"/>
+      <circle cx="32" cy="32" r="14" fill="#4e54c8"/>
+      <ellipse cx="32" cy="36" rx="14" ry="6" fill="#fff" opacity="0.2"/>
+      <circle cx="26" cy="30" r="2.5" fill="#fff"/>
+      <circle cx="38" cy="30" r="2.5" fill="#fff"/>
+    </svg>
+    <h1 title="JAYS AI">JAYS AI</h1>
+    <div class="subtitle">
+      Your smart AI assistant, ready for any question.
+      <span class="badge">v1.0</span>
+    </div>
+    <button class="recent-history-btn" id="recent-history-btn" title="Show recent questions">Recent History</button>
+    <div class="recent-history-list" id="recent-history-list"></div>
+    <label for="question">Ask anything:</label>
+    <textarea id="question" rows="2" placeholder="Type your question here..." autofocus></textarea>
+    <div class="button-row">
+      <button id="run-ai" aria-label="Ask your question to JAYS AI">Ask</button>
+    </div>
+    <div id="output"></div>
+    <div class="creator">Created by <span>Vee Jay Sta. Ines</span></div>
+    <div class="footer">
+      <svg width="19" height="19" viewBox="0 0 24 24" fill="#8f94fb"><path d="M12 2C7.03 2 3 6.03 3 11c0 3.49 2.17 6.44 5.22 7.59-.03.4-.13 1.06-.39 2.41-.06.34.24.63.59.56 2.05-.42 3.58-1.14 4.89-2.06C19.54 17.03 21 14.19 21 11c0-4.97-4.03-9-9-9zm.35 15.94c-.13.08-.25.15-.36.22-.53.32-1.05.61-1.61.87-.13.06-.26-.07-.22-.21.15-.51.26-.98.3-1.36.02-.17-.08-.34-.25-.4C6.3 15.25 4.5 13.28 4.5 11c0-3.58 3.11-6.5 7.5-6.5S19.5 7.42 19.5 11c0 2.28-1.8 4.25-4.61 5.26-.17.06-.27.23-.25.4.04.37.14.84.3 1.34.04.14-.09.27-.23.21-.49-.22-.96-.47-1.36-.73z"></path></svg>
+      Powered by Google Gemini AI
+    </div>
+  </div>
+  <script type="module">
+    import { GoogleGenAI } from "https://esm.sh/@google/genai";
+    document.addEventListener("DOMContentLoaded", () => {
+      const button = document.getElementById("run-ai");
+      const output = document.getElementById("output");
+      const input = document.getElementById("question");
+      const recentBtn = document.getElementById("recent-history-btn");
+      const recentList = document.getElementById("recent-history-list");
+      const MAX_HISTORY = 10;
+
+      // History functions (unchanged)
+      function getHistory() {
+        try {
+          return JSON.parse(localStorage.getItem('jays_ai_history') || "[]");
+        } catch {
+          return [];
+        }
+      }
+      function saveHistory(history) {
+        localStorage.setItem('jays_ai_history', JSON.stringify(history));
+      }
+      function renderRecentHistory() {
+        const history = getHistory();
+        if (!history.length) {
+          recentList.innerHTML = `<div class="recent-history-item" style="color:#888;">No recent questions.</div>`;
+          return;
+        }
+        recentList.innerHTML = history.slice(-MAX_HISTORY).reverse().map((entry, idx) =>
+          `<div class="recent-history-item" data-idx="${history.length-1-idx}" tabindex="0" title="Click to reuse this question">${entry.q}</div>`
+        ).join('');
+      }
+      recentBtn.addEventListener("click", () => {
+        recentBtn.classList.toggle("active");
+        recentList.classList.toggle("visible");
+        if (recentList.classList.contains("visible")) renderRecentHistory();
+      });
+      recentList.addEventListener("click", (e) => {
+        const item = e.target.closest(".recent-history-item");
+        if (item && item.dataset.idx !== undefined) {
+          const idx = Number(item.dataset.idx);
+          const history = getHistory();
+          input.value = history[idx].q;
+          input.focus();
+          recentBtn.classList.remove("active");
+          recentList.classList.remove("visible");
+        }
+      });
+      recentList.addEventListener("keydown", (e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains("recent-history-item")) {
+          e.target.click();
+        }
+      });
+      input.focus();
+      input.setSelectionRange(input.value.length, input.value.length);
+
+      // Animate wave on load
+      const wave = document.querySelector('.header-wave path');
+      if(wave) {
+        setTimeout(() => {
+          wave.setAttribute('d', "M0,120 Q250,30 500,120 L500,0 L0,0 Z");
+        }, 600);
+      }
+      document.querySelector("h1").addEventListener('click', () => {
+        const h1 = document.querySelector("h1");
+        h1.style.transform = 'scale(1.09) rotate(-4deg)';
+        setTimeout(() => h1.style.transform = '', 350);
+      });
+
+      button.addEventListener("click", askQuestion);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          button.click();
+        }
+      });
+
+      function addCopyBtn() {
+        if (!output.textContent.trim()) return;
+        if (document.getElementById("copy-btn")) return;
+        const copyBtn = document.createElement('button');
+        copyBtn.className = "copy-btn";
+        copyBtn.id = "copy-btn";
+        copyBtn.innerText = "Copy";
+        copyBtn.onclick = () => {
+          navigator.clipboard.writeText(output.textContent);
+          copyBtn.innerText = "Copied!";
+          setTimeout(()=>copyBtn.innerText = "Copy", 1100);
+        };
+        output.appendChild(copyBtn);
+      }
+
+      // Remove all symbols and asterisks (****) from AI output
+      function cleanAnswer(answer) {
+        // Remove Markdown code blocks
+        answer = answer.replace(/```[\s\S]*?```/g, '');
+        // Remove all asterisks (including **** blocks)
+        answer = answer.replace(/\*+/g, '');
+        // Remove all symbols and emoji except normal punctuation (.,!?), numbers, and letters
+        answer = answer.replace(/[^\w\s.,!?'"()-]/g, '');
+        // Remove extra spaces
+        answer = answer.replace(/\s+/g, ' ').trim();
+        return answer;
+      }
+
+      // Main Q&A logic
+      async function askQuestion() {
+        const userQuestion = input.value.trim();
+        if (!userQuestion) {
+          output.innerHTML = "<span class='success'>Please enter a question.</span>";
+          return;
+        }
+        output.innerHTML = "<span style='color:#888'>Thinking...</span>";
+        button.disabled = true;
+        button.textContent = "Thinking...";
+        try {
+          const ai = new GoogleGenAI({ apiKey: "AIzaSyAMKPVq1p5e4c3X8fWs4enuebqTREuqZlw" });
+          const systemPrompt = "When you answer, do not use any symbols or emoji. Do not use any asterisk characters. Only use words, numbers, and basic punctuation like periods and commas.";
+          const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: `${systemPrompt}\n\n${userQuestion}`,
+          });
+          let answer = response.text ||
+            (response.candidates && response.candidates[0]?.content?.parts?.[0]?.text) ||
+            "No response.";
+          answer = cleanAnswer(answer);
+          output.innerText = answer;
+          addCopyBtn();
+          // Save to history
+          let history = getHistory();
+          history.push({q: userQuestion, a: answer});
+          if (history.length > MAX_HISTORY) history = history.slice(-MAX_HISTORY);
+          saveHistory(history);
+        } catch (err) {
+          output.innerHTML = `<span class='error'>Error: ${err.message || err}</span>`;
+        }
+        button.disabled = false;
+        button.textContent = "Ask";
+      }
+    });
+  </script>
+</body>
+</html>
